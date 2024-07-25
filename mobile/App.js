@@ -5,7 +5,7 @@ import { appName } from "settings";
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Welcome to {appName}</Text>
+      <Text>Welcome to {appName}!</Text>
       <StatusBar style="auto" />
     </View>
   );
