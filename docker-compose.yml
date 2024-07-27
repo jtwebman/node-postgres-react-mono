@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    tty: true
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/mobile/node_modules
+      - /usr/src/app/services/api/node_modules
+      - /usr/src/app/shared/settings/node_modules
+      - /usr/src/app/web/node_modules
+    environment:
+      UV_THREADPOOL_SIZE: 128
+      NODE_ENV: production
+      LOG_LEVEL: info
+      PORT: 3000
+    working_dir: /usr/src/app
+    command:
+      [
+        "node",
+        "--watch-path=./services/api",
+        "--watch-path=./shared",
+        "services/api/service.js",
+      ]
