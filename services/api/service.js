@@ -6,7 +6,7 @@ const app = express();
 const port = 3000;
 
 app.get("/", (req, res) => {
-  res.send(`Hello World from API on ${appName}!`);
+  res.send(`Hello World from API on ${appName}`);
 });
 
 const nodeApp = stoppable(

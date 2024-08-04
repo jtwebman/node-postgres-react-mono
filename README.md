@@ -8,12 +8,13 @@ This will have abstractions for all things so you can replace them with your imp
 
 **Why not Typescript?** I love Typescript but it does take much longer to use and if you are a startup you should be focus on getting something in the hands of people. Latter on when you have mutiple teams working on the code base feel free to start adding Typescript.
 
-**Why no ORM?** I find it is one more thing the engineer needs to know to write code in the system. In the end all backend engineers need to know SQL and SQL is the perfect abstraction.
+**Why no ORM?** I find it is one more thing the engineer needs to know to write code in the system. In the end all backend engineers need to know SQL and SQL is the perfect abstraction. I use [PG-Promise](https://vitaly-t.github.io/pg-promise/) library that has some helpers but you do have to be a little careful in not using normal string injection into SQL.
 
 ## What it will contain in the end
 
 Will check these off with a date as we accomplish them
 
+- ~~All docker local environment setup~~
 - Account creation with email and password
 - Email verification
 - User login email and password
@@ -40,3 +41,19 @@ Will check these off with a date as we accomplish them
 - Import and exporting projects and tasks with background tasks
 - Crud jobs for cleaning up old accounts (No on logs in for 90 days with a 30 day, 10 day, and 24 hour notice email)
 - Add billing and pay levels for a per user after 3 (maybe?)
+
+## Dev Environment
+
+From the root just run `docker compose up -d` which will start all the databases and start the api container, web app, and mobile app. This will only work if you are using WSL2 and Ubuntu on Windows or whould work with any Mac. You will also need to install Docker desktop for your machine or docker and docker compose for linux.
+
+### Web App
+
+The web aapp can now be accessed via http://localhost:4000
+
+### React Native Expo App
+
+It will use a random ngrok url to expose the Expo stuff to the world. You can run `docker compose logs -f mobile` to gain access to the barcode and scan it. You can also access the mobile app via the browser http://localhost:8081
+
+### API
+
+The API is at http://localhost:3000
