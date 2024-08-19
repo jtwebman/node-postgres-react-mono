@@ -1,6 +1,8 @@
+import { getLogger } from 'logger';
+import npmPackage from './package.json' with { type: 'json' };
+
 import { getConfig } from './config.js';
 import { getContext } from './context.js';
-import { getLogger } from './logger.js';
 import { getDB } from './data/db.js';
 import { getApp } from './app.js';
 import stoppable from 'stoppable';
@@ -13,7 +15,10 @@ const killSignals = {
 };
 
 const config = getConfig();
-const logger = getLogger(config);
+const logger = getLogger(config.LOG_LEVEL, {
+  appName: `${config.APP_NAME} API`,
+  version: npmPackage.version,
+});
 let db = null;
 let nodeApp = null;
 

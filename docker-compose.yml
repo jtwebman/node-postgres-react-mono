@@ -19,6 +19,29 @@ services:
       - ./db/postgresql.conf:/etc/postgresql.conf
     tmpfs:
       - /var/lib/postgresql/data
+  db-migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    tty: true
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/mobile/node_modules
+      - /usr/src/app/services/api/node_modules
+      - /usr/src/app/shared/db-migrations/node_modules
+      - /usr/src/app/shared/logger/node_modules
+      - /usr/src/app/shared/settings/node_modules
+      - /usr/src/app/web/node_modules
+    environment:
+      UV_THREADPOOL_SIZE: 128
+      NODE_ENV: production
+      LOG_LEVEL: info
+      PATCH_FOLDER: /usr/src/app/services/api/db/patches
+      PG_CONNECTION: postgres://apiuser:password123!@db:5432/api
+      PG_MIGRATION_CONNECTION: postgres://root-user:password123!@db:5432/postgres
+    working_dir: /usr/src/app
+    command: ['node', 'shared/db-migrations/run.js']
   api:
     build:
       context: .
@@ -31,6 +54,8 @@ services:
       - /usr/src/app/node_modules
       - /usr/src/app/mobile/node_modules
       - /usr/src/app/services/api/node_modules
+      - /usr/src/app/shared/db-migrations/node_modules
+      - /usr/src/app/shared/logger/node_modules
       - /usr/src/app/shared/settings/node_modules
       - /usr/src/app/web/node_modules
     environment:
@@ -38,9 +63,14 @@ services:
       NODE_ENV: production
       LOG_LEVEL: info
       PORT: 3000
-      PG_CONNECTION: postgres://root-user:password123!@db:5432/postgres
+      PG_CONNECTION: postgres://apiuser:password123!@db:5432/api
     working_dir: /usr/src/app
     command: ['node', '--watch-path=./services/api', '--watch-path=./shared', 'services/api/service.js']
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://api:3000/status']
+      interval: 30s
+      timeout: 5s
+      retries: 3
   web:
     build:
       context: .
@@ -53,6 +83,8 @@ services:
       - /usr/src/app/node_modules
       - /usr/src/app/mobile/node_modules
       - /usr/src/app/services/api/node_modules
+      - /usr/src/app/shared/db-migrations/node_modules
+      - /usr/src/app/shared/logger/node_modules
       - /usr/src/app/shared/settings/node_modules
       - /usr/src/app/web/node_modules
     environment:
@@ -74,6 +106,8 @@ services:
       - /usr/src/app/node_modules
       - /usr/src/app/mobile/node_modules
       - /usr/src/app/services/api/node_modules
+      - /usr/src/app/shared/db-migrations/node_modules
+      - /usr/src/app/shared/logger/node_modules
       - /usr/src/app/shared/settings/node_modules
       - /usr/src/app/web/node_modules
     environment:

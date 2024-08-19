@@ -8,8 +8,13 @@ import express from 'express';
 export function getApp(context) {
   const app = express();
 
-  app.get('/', (req, res) => {
-    res.send(`Hello World from API on ${context.config.APP_NAME}`);
+  /* Healthcheck Route */
+  app.get('/status', (req, res) => {
+    res.json({
+      message: 'Healthy API',
+      appName: context.config.APP_NAME,
+      appVersion: context.config.APP_VERSION,
+    });
   });
 
   return app;

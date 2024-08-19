@@ -9,6 +9,6 @@ COPY pnpm-workspace.yaml /usr/src/app/pnpm-workspace.yaml
 COPY mobile/package.json ./mobile/
 COPY web/package.json ./web/
 COPY services/api/package.json ./services/api/
-COPY shared/settings/package.json ./shared/settings/
+COPY shared/*/package.json ./shared/*/
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 COPY . .

@@ -13,6 +13,7 @@
   "dependencies": {
     "async-retry": "^1.3.3",
     "express": "^4.19.2",
+    "logger": "workspace:*",
     "pg-promise": "^11.9.1",
     "pino": "^9.3.2",
     "settings": "workspace:*",
